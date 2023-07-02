@@ -9,7 +9,7 @@ import UIKit
 
 class ModalTransition : Transition {
     func open(_ viewController: UIViewController, from: UIViewController, completion: (() -> Void)?) {
-        viewController.modalPresentationStyle = .fullScreen
+        viewController.modalPresentationStyle = .overCurrentContext
         from.present(viewController, animated: true, completion: completion)
     }
     
