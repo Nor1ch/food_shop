@@ -6,19 +6,24 @@
 //
 
 import Foundation
+import Combine
 
 final class CategoryViewModel {
+    @Published var food: [FoodModelCompl] = []
+    let tags = [Tegs.all.rawValue, Tegs.salad.rawValue, Tegs.rice.rawValue, Tegs.fish.rawValue]
+    private var cancelable = Set<AnyCancellable>()
     typealias Route = DetailsRoute
     private let router: Route
-    let array = [TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder()]
-    
-    let tags = ["Салат","Еда","Творог","Творог","Салат","Салат","Салат","Салат","Салат","Салат","Еда","Творог","Творог","Салат","Салат","Салат","Салат","Салат","Салат","Еда","Творог","Творог","Салат","Салат","Салат","Салат","Салат","Салат","Еда","Творог","Творог","Салат","Салат","Салат","Салат","Салат","Салат"]
-    
     init(router: Route){
         self.router = router
+        fetchFood()
+            .sink { model in
+                self.food = model
+            }
+            .store(in: &cancelable)
     }
     
-    func openDetails(){
-        router.openDetails()
+    func openDetails(food: FoodModelCompl){
+        router.openDetails(food: food)
     }
 }

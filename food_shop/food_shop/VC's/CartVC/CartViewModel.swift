@@ -10,6 +10,7 @@ import Foundation
 final class CartViewModel {
     
     private let router: MainRouter
+    let array = [TestModelCart.makePlaceHolder(),TestModelCart.makePlaceHolder(),TestModelCart.makePlaceHolder(),TestModelCart.makePlaceHolder(),TestModelCart.makePlaceHolder(),TestModelCart.makePlaceHolder(),]
     
     init(router: MainRouter){
         self.router = router

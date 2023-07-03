@@ -5,6 +5,7 @@
 //  Created by Nor1 on 29.06.2023.
 //
 import Foundation
+import Combine
 import SnapKit
 import UIKit
 
@@ -21,6 +22,7 @@ final class MainVC: UIViewController {
     
     private let viewModel: MainViewModel
     private let collectionView: UICollectionView
+    private var cancelable = Set<AnyCancellable>()
     
     init(viewModel: MainViewModel, collectionView: UICollectionView){
         self.viewModel = viewModel
@@ -36,11 +38,12 @@ final class MainVC: UIViewController {
         setupViews()
         makeConstraints()
         setupCollectionView()
-        view.backgroundColor = .white
+        bind()
     }
     
     private func setupViews(){
         view.addSubview(collectionView)
+        view.backgroundColor = Constants.Colors.white
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: CustomNavBarItem(image: UIImage(named: "t")!, frame: CGRect(x: 0, y: 0, width: CGFloat.rightNavButtonSize, height: CGFloat.rightNavButtonSize)))
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: CustomNavBarItem(city: "Cанкт-Петерург", date: "12 сентября 2023", frame: CGRect(x: 0, y: 0, width: CGFloat.leftNavWidth, height: CGFloat.leftNavHeight)))
     }
@@ -57,16 +60,22 @@ final class MainVC: UIViewController {
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
     }
+    private func bind(){
+        viewModel.$categories
+            .sink(receiveValue: { models in
+                self.collectionView.reloadData()})
+            .store(in: &cancelable)
+    }
 }
 
 extension MainVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.array.count
+        viewModel.categories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CategoryCell.self)", for: indexPath) as? CategoryCell else { return UICollectionViewCell() }
-        let item = viewModel.array[indexPath.row]
+        let item = viewModel.categories[indexPath.row]
         cell.setupCell(name: item.name, image: item.image)
         return cell
     }

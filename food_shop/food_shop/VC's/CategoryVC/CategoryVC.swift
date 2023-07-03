@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import UIKit
 
 private extension CGFloat {
@@ -16,6 +17,8 @@ final class CategoryVC: UIViewController {
     
     private let viewModel: CategoryViewModel
     private let collectionView: UICollectionView
+    private var cancelable = Set<AnyCancellable>()
+    private var array: [FoodModelCompl] = []
     
     init(viewModel: CategoryViewModel, collectionView: UICollectionView){
         self.viewModel = viewModel
@@ -34,6 +37,7 @@ final class CategoryVC: UIViewController {
         setupViews()
         makeConstraints()
         setupCollectionView()
+        bind()
     }
     private func setupViews(){
         view.addSubview(collectionView)
@@ -41,10 +45,10 @@ final class CategoryVC: UIViewController {
         
     }
     private func setupCollectionView(){
-        collectionView.dataSource = self
-        collectionView.delegate = self
         collectionView.register(FoodOfCategory.self, forCellWithReuseIdentifier: "\(FoodOfCategory.self)")
         collectionView.register(FoodCategorySingle.self, forCellWithReuseIdentifier: "\(FoodCategorySingle.self)")
+        collectionView.dataSource = self
+        collectionView.delegate = self
     }
     private func makeConstraints(){
         collectionView.snp.makeConstraints { make in
@@ -53,6 +57,14 @@ final class CategoryVC: UIViewController {
             make.bottom.equalToSuperview()
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
+    }
+    private func bind(){
+        viewModel.$food
+            .sink(receiveValue: {array in
+                self.array = array
+                self.collectionView.reloadData()
+            })
+            .store(in: &cancelable)
     }
 }
 
@@ -65,7 +77,7 @@ extension CategoryVC: UICollectionViewDataSource {
         case 0:
             return viewModel.tags.count
         default:
-            return viewModel.array.count
+            return array.count
         }
     }
     
@@ -79,7 +91,7 @@ extension CategoryVC: UICollectionViewDataSource {
              return cell
         default:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(FoodCategorySingle.self)", for: indexPath) as? FoodCategorySingle else { return UICollectionViewCell() }
-             let item = viewModel.array[indexPath.row]
+             let item = array[indexPath.row]
              cell.setupCell(name: item.name, image: item.image)
              return cell
         }
@@ -87,6 +99,12 @@ extension CategoryVC: UICollectionViewDataSource {
 }
 extension CategoryVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel.openDetails()
+        switch indexPath.section {
+        case 0:
+            collectionView.reloadData()
+        default:
+            viewModel.openDetails(food: array[indexPath.row])
+        }
+        
     }
 }

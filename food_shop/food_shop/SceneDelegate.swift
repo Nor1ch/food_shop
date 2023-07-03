@@ -17,7 +17,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         let router = MainRouter(rootTransition: EmptyTransition())
         window?.rootViewController = router.makeTabbar()
-//        window?.rootViewController = router.makeCategory()
         window?.makeKeyAndVisible()
     }
 

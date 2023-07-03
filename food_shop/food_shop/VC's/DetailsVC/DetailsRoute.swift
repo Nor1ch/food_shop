@@ -12,19 +12,19 @@ import Foundation
 import UIKit
 
 protocol DetailsRoute {
-    func openDetails()
+    func openDetails(food: FoodModelCompl)
 }
 
 extension MainRoute where Self: Router {
-    func openDetails(transition: Transition) {
+    func openDetails(transition: Transition, food: FoodModelCompl) {
         let router = MainRouter(rootTransition: EmptyTransition())
         let viewModel = DetailViewModel(router: router)
-        let viewController = DetailsVC(viewModel: viewModel)
+        let viewController = DetailsVC(viewModel: viewModel, food: food)
         router.root = viewController
         route(to: viewController, as: transition)
     }
-    func openDetails(){
-        openDetails(transition: ModalTransition())
+    func openDetails(food: FoodModelCompl){
+        openDetails(transition: ModalTransition(), food: food)
     }
 }
 

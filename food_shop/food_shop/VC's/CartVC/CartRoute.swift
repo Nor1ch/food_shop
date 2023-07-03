@@ -10,7 +10,6 @@ import UIKit
 
 protocol CartRoute {
     func makeCart() -> UIViewController
-//    func openCart()
 }
 
 extension MainRoute where Self: Router {
@@ -23,16 +22,6 @@ extension MainRoute where Self: Router {
         navigation.tabBarItem = UITabBarItem(title: "Корзина", image: Constants.Images.cart, tag: 3)
         return navigation
     }
-//    func openCart(transition: Transition) {
-//        let router = MainRouter(rootTransition: EmptyTransition())
-//        let viewModel = MainViewModel(router: router)
-//        let viewController = MainVC(viewModel: viewModel)
-//        router.root = viewController
-//        route(to: viewController, as: transition)
-//    }
-//    func openCart(){
-//        openCart(transition: PushTransition())
-//    }
 }
 
 extension MainRouter: CartRoute {}

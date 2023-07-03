@@ -28,3 +28,13 @@ struct TestModelDescritprion {
         TestModelDescritprion(title: "Рыба с овощами и рисом", image: UIImage(named: "categorytest")!, cost: 799, weight: 560, description: "Рыба маринованна со специями, лимонным соком, соевым соусом и запеченная в духовке с лучком, томатами и картошечкой под золотистой мйонезно-сырной шубкой")
     }
 }
+struct TestModelCart {
+    let name: String
+    let image: UIImage
+    let price: Int
+    let weight: Int
+    
+    static func makePlaceHolder()-> TestModelCart {
+        TestModelCart(name: "Рыба с овощами и рисом", image: UIImage(named: "categorytest")!, price: 799, weight: 380)
+    }
+}

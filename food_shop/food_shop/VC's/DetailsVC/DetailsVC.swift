@@ -24,7 +24,7 @@ private extension CGFloat {
 
 final class DetailsVC: UIViewController {
     private let viewModel: DetailViewModel
-    
+    private let food: FoodModelCompl
     private lazy var backgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = Constants.Colors.black
@@ -43,7 +43,6 @@ final class DetailsVC: UIViewController {
     }()
     private lazy var foodImage: UIImageView = {
         let view = UIImageView()
-        view.image = viewModel.array.image
         view.contentMode = .scaleAspectFill
         view.layer.cornerRadius = CGFloat.corner10
         view.layer.masksToBounds = true
@@ -55,26 +54,22 @@ final class DetailsVC: UIViewController {
     }()
     private lazy var foodTitle: UILabel = {
         let view = UILabel()
-        view.text = viewModel.array.title
         view.font = Constants.Font.DetailsScreen.foodName
         return view
     }()
     private lazy var foodCost: UILabel = {
         let view = UILabel()
-        view.text = String(viewModel.array.cost) + " Р"
         view.font = Constants.Font.DetailsScreen.foodCost
         return view
     }()
     private lazy var foodWeight: UILabel = {
         let view = UILabel()
-        view.text = String(viewModel.array.weight) + "г"
         view.font = Constants.Font.DetailsScreen.foodWeight
         view.textColor = Constants.Colors.light_gray
         return view
     }()
     private lazy var foodDescription: UILabel = {
         let view = UILabel()
-        view.text = String(viewModel.array.description)
         view.font = Constants.Font.DetailsScreen.foodDescription
         view.textColor = Constants.Colors.gray
         view.numberOfLines = 0
@@ -114,8 +109,9 @@ final class DetailsVC: UIViewController {
         view.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         return view
     }()
-    init(viewModel: DetailViewModel){
+    init(viewModel: DetailViewModel, food: FoodModelCompl){
         self.viewModel = viewModel
+        self.food = food
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -125,6 +121,11 @@ final class DetailsVC: UIViewController {
         super.viewDidLoad()
         setupViews()
         makeConstraints()
+        setupInfo()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        dismiss(animated: true, completion: nil)
     }
     private func setupViews(){
         view.addSubview(backgroundView)
@@ -203,7 +204,15 @@ final class DetailsVC: UIViewController {
             make.bottom.lessThanOrEqualToSuperview()
         }
     }
+    private func setupInfo(){
+        foodImage.image = food.image
+        foodTitle.text = food.name
+        foodCost.text = String(food.price)
+        foodWeight.text = String(food.weight)
+        foodDescription.text = food.description
+    }
     @objc private func addTapped(){
+        dismiss(animated: true, completion: nil)
     }
     @objc private func favTapped(){
     }

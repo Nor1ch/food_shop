@@ -6,13 +6,19 @@
 //
 
 import Foundation
+import Combine
 
 final class MainViewModel {
+    @Published var categories: [CategoryModelCompl] = []
     typealias Route = MainRoute & CategoryRoute
+    private var cancelables = Set<AnyCancellable>()
     private let router: Route
-    let array = [TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),TestModel.makePlaceHolder(),]
     init(router: Route){
         self.router = router
+        fetchCategories()
+            .sink { model in
+                self.categories = model
+            }.store(in: &cancelables)
     }
     
     func openCategory(){

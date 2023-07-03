@@ -31,6 +31,12 @@ enum Constants {
         static var close: UIImage {
             UIImage(named: "close") ?? UIImage()
         }
+        static var plus: UIImage {
+            UIImage(named: "plus") ?? UIImage()
+        }
+        static var minus: UIImage {
+            UIImage(named: "minus") ?? UIImage()
+        }
     }
     enum Font {
         enum MainScreen {
@@ -63,6 +69,17 @@ enum Constants {
                 UIFont(name: "Montserrat-Light", size: 13)
             }
         }
+        enum CartScreen {
+            static var foodName: UIFont? {
+                UIFont(name: "Montserrat-Medium", size: 14)
+            }
+            static var foodCost: UIFont? {
+                UIFont(name: "Montserrat-Medium", size: 14)
+            }
+            static var counter: UIFont? {
+                UIFont(name: "Montserrat-Bold", size: 14)
+            }
+        }
     }
     enum Colors {
         static var white: UIColor? {
@@ -82,6 +99,9 @@ enum Constants {
         }
         static var blue: UIColor? {
             UIColor(named: "blue")
+        }
+        static var gray_buttons: UIColor? {
+            UIColor(named: "gray_buttons")
         }
     }
 }
