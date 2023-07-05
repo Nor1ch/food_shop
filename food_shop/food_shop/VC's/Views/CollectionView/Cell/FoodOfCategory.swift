@@ -11,6 +11,7 @@ import UIKit
 
 private extension CGFloat {
     static let offset = 10.0
+    static let offset15 = 15.0
 }
 
 final class FoodOfCategory: UICollectionViewCell {
@@ -38,14 +39,17 @@ final class FoodOfCategory: UICollectionViewCell {
     }
     private func makeConstraints(){
         categoryName.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(CGFloat.offset*2)
+            make.left.equalToSuperview().offset(CGFloat.offset15)
             make.top.equalToSuperview().offset(CGFloat.offset)
-            make.right.equalToSuperview().inset(CGFloat.offset*2)
+            make.right.equalToSuperview().inset(CGFloat.offset15)
             make.bottom.equalToSuperview().inset(CGFloat.offset)
         }
     }
     
     func setupCell(name: String){
         categoryName.text = name
+    }
+    func setupTextColor(color: UIColor){
+        categoryName.textColor = color
     }
 }

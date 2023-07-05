@@ -8,10 +8,16 @@
 import Foundation
 import UIKit
 
+protocol CartTableViewDelegate: AnyObject {
+    func plusPressed(index: IndexPath)
+    func minusPressed(index: IndexPath)
+}
+
 private extension CGFloat {
     static let cornerRaius = 10.0
-    static let imageOffset = 10.0
-    static let imageOffsetLeft = 15.0
+    static let offset = 10.0
+    static let offsetLeft = 15.0
+    static let offsetImage = 12.0
     static let textOffset = 10.0
     static let textOffset5 = 3.0
     static let multipliedByConButtons = 0.3
@@ -22,9 +28,20 @@ private extension CGFloat {
 
 final class CartTableViewCell: UITableViewCell {
     
+    private var food: CartModel?
+    weak var delegate: CartTableViewDelegate?
+    var index: IndexPath?
+    
     private lazy var foodImage: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFill
+        view.contentMode = .scaleAspectFit
+        view.layer.cornerRadius = CGFloat.cornerRaius
+        view.layer.masksToBounds = true
+        return view
+    }()
+    private lazy var containerImage: UIView = {
+        let view = UIView()
+        view.backgroundColor = Constants.Colors.background_white
         view.layer.cornerRadius = CGFloat.cornerRaius
         view.layer.masksToBounds = true
         return view
@@ -56,7 +73,7 @@ final class CartTableViewCell: UITableViewCell {
         return view
     }()
     private lazy var buttons: CartButtons = {
-        let view = CartButtons(selectorPlus: #selector(plusPressed), selectorMinus: #selector(minusPressed))
+        let view = CartButtons()
         return view
     }()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -67,21 +84,34 @@ final class CartTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+    }
     private func setuViews(){
-        addSubview(foodImage)
-        addSubview(containerText)
-        addSubview(containerButtons)
+        contentView.addSubview(containerImage)
+        contentView.addSubview(containerText)
+        contentView.addSubview(containerButtons)
+        containerImage.addSubview(foodImage)
         containerText.addSubview(foodName)
         containerText.addSubview(foodCost)
         containerText.addSubview(foodWeight)
         containerButtons.addSubview(buttons)
+        buttons.plusButton.addTarget(self, action: #selector(plusPressed), for: .touchUpInside)
+        buttons.minusButton.addTarget(self, action: #selector(minusPressed), for: .touchUpInside)
     }
     private func makeConstraints(){
+        containerImage.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(CGFloat.offsetLeft)
+            make.top.equalToSuperview().offset(CGFloat.offset)
+            make.bottom.equalToSuperview().inset(CGFloat.offset)
+            make.width.equalTo(containerImage.snp.height)
+        }
         foodImage.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(CGFloat.imageOffsetLeft)
-            make.top.equalToSuperview().offset(CGFloat.imageOffset)
-            make.bottom.equalToSuperview().inset(CGFloat.imageOffset)
-            make.width.equalTo(foodImage.snp.height)
+            make.top.equalToSuperview().offset(CGFloat.offsetImage)
+            make.left.equalToSuperview().offset(CGFloat.offsetImage)
+            make.right.equalToSuperview().inset(CGFloat.offset)
+            make.bottom.equalToSuperview().inset(CGFloat.offset)
         }
         containerButtons.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(CGFloat.buttonOffset)
@@ -90,9 +120,10 @@ final class CartTableViewCell: UITableViewCell {
             make.centerY.equalToSuperview()
         }
         containerText.snp.makeConstraints { make in
-            make.left.equalTo(foodImage.snp.right).offset(CGFloat.textOffset)
+            make.left.equalTo(containerImage.snp.right).offset(CGFloat.textOffset)
             make.right.lessThanOrEqualTo(containerButtons.snp.left)
-            make.height.greaterThanOrEqualTo(CGFloat.minHeight)
+            make.top.equalTo(foodName.snp.top)
+            make.bottom.equalTo(foodCost.snp.bottom)
             make.centerY.equalToSuperview()
         }
         foodName.snp.makeConstraints { make in
@@ -113,15 +144,21 @@ final class CartTableViewCell: UITableViewCell {
         }
     }
     @objc private func plusPressed(){
-        print("plus")
+        if let delegate = delegate, let index = index {
+            delegate.plusPressed(index: index)
+        }
     }
     @objc private func minusPressed(){
-        print("minus")
+        if let delegate = delegate, let index = index {
+            delegate.minusPressed(index: index)
+        }
     }
-    func setupCell(model: TestModelCart){
-        foodImage.image = model.image
-        foodName.text = model.name
-        foodCost.text = String(model.price) + " Р"
-        foodWeight.text = String(model.weight) + "г"
+    func setupCell(model: CartModel){
+        self.food = model
+        foodImage.image = model.name.image
+        foodName.text = model.name.name
+        foodCost.text = String(model.name.price) + " ₽"
+        foodWeight.text = String(model.name.weight) + "г"
+        buttons.counter.text = String(model.count)
     }
 }

@@ -21,7 +21,7 @@ final class MainViewModel {
             }.store(in: &cancelables)
     }
     
-    func openCategory(){
-        router.openCategory()
+    func openCategory(title: String){
+        router.openCategory(title: title)
     }
 }

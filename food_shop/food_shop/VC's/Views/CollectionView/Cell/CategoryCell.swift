@@ -11,8 +11,9 @@ import UIKit
 
 private extension CGFloat {
     static let titleOffset = 10.0
+    static let offset = 5.0
     static let multipliedBy050 = 0.50
-    static let multipliedBy030 = 0.30
+    static let multipliedBy030 = 0.20
 }
 
 final class CategoryCell: UICollectionViewCell {
@@ -45,10 +46,10 @@ final class CategoryCell: UICollectionViewCell {
     }
     private func makeConstraints(){
         categoryImage.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.bottom.left.right.equalToSuperview()
         }
         categoryName.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(CGFloat.titleOffset)
+            make.left.equalToSuperview().offset(CGFloat.titleOffset*2)
             make.top.equalToSuperview().offset(CGFloat.titleOffset)
             make.width.equalToSuperview().multipliedBy(CGFloat.multipliedBy050)
             make.height.greaterThanOrEqualToSuperview().multipliedBy(CGFloat.multipliedBy030)

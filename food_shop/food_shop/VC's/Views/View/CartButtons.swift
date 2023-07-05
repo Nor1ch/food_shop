@@ -10,14 +10,14 @@ import SnapKit
 import UIKit
 
 private extension CGFloat {
-    static let cornerRadius = 15.0
+    static let cornerRadius = 10.0
     static let multipliedBy033 = 0.33
     static let offset = 5.0
 }
 
 final class CartButtons: UIView {
     
-    private lazy var plusButton : UIButton = {
+    lazy var plusButton : UIButton = {
         let view = UIButton()
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = .clear
@@ -27,7 +27,7 @@ final class CartButtons: UIView {
         view.configuration = config
         return view
     }()
-    private lazy var minusButton : UIButton = {
+    lazy var minusButton : UIButton = {
         let view = UIButton()
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = .clear
@@ -51,12 +51,12 @@ final class CartButtons: UIView {
         return view
     }()
     
-    init(selectorPlus: Selector, selectorMinus: Selector){
+    init(){
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-        plusButton.addTarget(self, action: selectorPlus, for: .touchUpInside)
-        minusButton.addTarget(self, action: selectorMinus, for: .touchUpInside)
         setupViews()
         makeConstraints()
+//        plusButton.addTarget(self, action: selectorPlus, for: .touchUpInside)
+//        minusButton.addTarget(self, action: selectorMinus, for: .touchUpInside)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -64,9 +64,9 @@ final class CartButtons: UIView {
     
     private func setupViews(){
         addSubview(spacer)
+        addSubview(counter)
         addSubview(minusButton)
         addSubview(plusButton)
-        addSubview(counter)
     }
     private func makeConstraints(){
         minusButton.snp.makeConstraints { make in

@@ -44,8 +44,8 @@ final class MainVC: UIViewController {
     private func setupViews(){
         view.addSubview(collectionView)
         view.backgroundColor = Constants.Colors.white
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: CustomNavBarItem(image: UIImage(named: "t")!, frame: CGRect(x: 0, y: 0, width: CGFloat.rightNavButtonSize, height: CGFloat.rightNavButtonSize)))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: CustomNavBarItem(city: "Cанкт-Петерург", date: "12 сентября 2023", frame: CGRect(x: 0, y: 0, width: CGFloat.leftNavWidth, height: CGFloat.leftNavHeight)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: CustomNavBarItem(image: Constants.Images.user, frame: CGRect(x: 0, y: 0, width: CGFloat.rightNavButtonSize, height: CGFloat.rightNavButtonSize)))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: CustomNavBarItem(city: "Cанкт-Петерург", date: "12 Cентября 2023", frame: CGRect(x: 0, y: 0, width: CGFloat.leftNavWidth, height: CGFloat.leftNavHeight)))
     }
     private func setupCollectionView(){
         collectionView.dataSource = self
@@ -82,6 +82,6 @@ extension MainVC: UICollectionViewDataSource {
 }
 extension MainVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel.openCategory()
+        viewModel.openCategory(title: viewModel.categories[indexPath.row].name)
     }
 }

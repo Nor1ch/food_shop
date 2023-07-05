@@ -10,7 +10,7 @@ import Combine
 
 final class CategoryViewModel {
     @Published var food: [FoodModelCompl] = []
-    let tags = [Tegs.all.rawValue, Tegs.salad.rawValue, Tegs.rice.rawValue, Tegs.fish.rawValue]
+    let tags = [Tegs.all, Tegs.salad, Tegs.rice, Tegs.fish]
     private var cancelable = Set<AnyCancellable>()
     typealias Route = DetailsRoute
     private let router: Route

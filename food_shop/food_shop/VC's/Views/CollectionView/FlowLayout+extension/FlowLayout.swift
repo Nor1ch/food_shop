@@ -10,6 +10,7 @@ import UIKit
 
 private extension CGFloat {
     static let offset = 10.0
+    static let offset15 = 15.0
     static let offset5 = 2.5
     static let estimatedMax = 10000.0
     static let estimatedTag = 300.0
@@ -22,8 +23,8 @@ private extension CGFloat {
 extension UICollectionViewFlowLayout {
     static func singleItemInRow() -> UICollectionViewFlowLayout {
         let flow = UICollectionViewFlowLayout()
-        flow.itemSize = .init(width: UIScreen.main.bounds.width - CGFloat.offset*2, height: UIScreen.main.bounds.height/5)
-        flow.sectionInset = .init(top: CGFloat.offset, left: CGFloat.offset, bottom: CGFloat.offset, right: CGFloat.offset)
+        flow.itemSize = .init(width: UIScreen.main.bounds.width - CGFloat.offset15*2, height: UIScreen.main.bounds.height/5)
+        flow.sectionInset = .init(top: CGFloat.offset15, left: CGFloat.offset15, bottom: CGFloat.offset, right: CGFloat.offset15)
         return flow
     }
     static func detailsWithSection() -> UICollectionViewFlowLayout {

@@ -9,31 +9,21 @@ import Foundation
 import UIKit
 
 protocol CategoryRoute {
-    func openCategory()
-    func makeCategory() -> UIViewController
+    func openCategory(title: String)
 }
 
 extension MainRoute where Self: Router {
-    func openCategory(transition: Transition) {
+    func openCategory(transition: Transition, title: String) {
         let router = MainRouter(rootTransition: EmptyTransition())
         let viewModel = CategoryViewModel(router: router)
         let flow = UICollectionViewCompositionalLayout.layoutWithTags()
         let viewController = CategoryVC(viewModel: viewModel, collectionView: CustomCollectionView(flowLayout: flow))
         router.root = viewController
+        viewController.title = title
         route(to: viewController, as: transition)
     }
-    func openCategory(){
-        openCategory(transition: PushTransition())
-    }
-    func makeCategory() -> UIViewController {
-        let router = MainRouter(rootTransition: EmptyTransition())
-        let viewModel = CategoryViewModel(router: router)
-        let flow = UICollectionViewCompositionalLayout.layoutWithTags()
-        let viewController = CategoryVC(viewModel: viewModel, collectionView: CustomCollectionView(flowLayout: flow))
-        let navigation = UINavigationController(rootViewController: viewController)
-        router.root = viewController
-        navigation.tabBarItem = UITabBarItem(title: "Главная", image: Constants.Images.home, tag: 0)
-        return navigation
+    func openCategory(title: String){
+        openCategory(transition: PushTransition(),title: title)
     }
 }
 

@@ -37,47 +37,64 @@ enum Constants {
         static var minus: UIImage {
             UIImage(named: "minus") ?? UIImage()
         }
+        static var user: UIImage {
+            UIImage(named: "user") ?? UIImage()
+        }
+        static var vector: UIImage {
+            UIImage(named: "vector") ?? UIImage()
+        }
     }
     enum Font {
         enum MainScreen {
             static var city: UIFont? {
-                UIFont(name: "Montserrat-SemiBold", size: 18)
+//                UIFont(name: "Montserrat-SemiBold", size: 18)
+                .boldSystemFont(ofSize: 18)
             }
             static var date: UIFont? {
-                UIFont(name: "Montserrat-Light", size: 14)
+//                UIFont(name: "Montserrat-Light", size: 14)
+                .systemFont(ofSize: 14)
             }
             static var categoryName: UIFont? {
-                UIFont(name: "Montserrat-SemiBold", size: 20)
+//                UIFont(name: "SF-Pro-Display-Medium", size: 60)
+                .boldSystemFont(ofSize: 22)
             }
         }
         enum CategoryScreen {
             static var categoryName: UIFont? {
-                UIFont(name: "Montserrat-Medium", size: 14)
+//                UIFont(name: "Montserrat-Medium", size: 14)
+                .systemFont(ofSize: 14)
             }
         }
         enum DetailsScreen {
             static var foodName: UIFont? {
-                UIFont(name: "Montserrat-SemiBold", size: 16)
+//                UIFont(name: "Montserrat-SemiBold", size: 16)
+                .boldSystemFont(ofSize: 18)
             }
             static var foodCost: UIFont? {
-                UIFont(name: "Montserrat-Medium", size: 14)
+//                UIFont(name: "Montserrat-Medium", size: 14)
+                .systemFont(ofSize: 15)
             }
             static var foodWeight: UIFont? {
-                UIFont(name: "Montserrat-Light", size: 14)
+//                UIFont(name: "Montserrat-Light", size: 14)
+                .systemFont(ofSize: 15)
             }
             static var foodDescription: UIFont? {
-                UIFont(name: "Montserrat-Light", size: 13)
+//                UIFont(name: "Montserrat-Light", size: 13)
+                .systemFont(ofSize: 14)
             }
         }
         enum CartScreen {
             static var foodName: UIFont? {
-                UIFont(name: "Montserrat-Medium", size: 14)
+//                UIFont(name: "Montserrat-Medium", size: 14)
+                .systemFont(ofSize: 14)
             }
             static var foodCost: UIFont? {
-                UIFont(name: "Montserrat-Medium", size: 14)
+//                UIFont(name: "Montserrat-Medium", size: 14)
+                .systemFont(ofSize: 14)
             }
             static var counter: UIFont? {
-                UIFont(name: "Montserrat-Bold", size: 14)
+//                UIFont(name: "Montserrat-Bold", size: 14)
+                .systemFont(ofSize: 14)
             }
         }
     }

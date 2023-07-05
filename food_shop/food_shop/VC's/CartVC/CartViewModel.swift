@@ -6,13 +6,21 @@
 //
 
 import Foundation
+import UIKit
+import Combine
 
 final class CartViewModel {
-    
+    private var cancelable = Set<AnyCancellable>()
     private let router: MainRouter
-    let array = [TestModelCart.makePlaceHolder(),TestModelCart.makePlaceHolder(),TestModelCart.makePlaceHolder(),TestModelCart.makePlaceHolder(),TestModelCart.makePlaceHolder(),TestModelCart.makePlaceHolder(),]
+    @Published var model: FoodModelCompl = FoodModelCompl(id: 2, name: "", price: 3, weight: 3, description: "", image: UIImage(), tegs: [.none])
+    @Published var array : [FoodModelCompl] = []
     
     init(router: MainRouter){
         self.router = router
+        CartManager.shared.$cart
+            .sink(receiveValue: {model in
+                self.model = model
+            })
+            .store(in: &cancelable)
     }
 }

@@ -20,6 +20,13 @@ final class CategoryVC: UIViewController {
     private var cancelable = Set<AnyCancellable>()
     private var array: [FoodModelCompl] = []
     
+    private lazy var backButton: UIButton = {
+        let view = UIButton()
+        view.setImage(Constants.Images.vector, for: .normal)
+        view.addTarget(self, action: #selector(backPressed), for: .touchUpInside)
+        return view
+    }()
+    
     init(viewModel: CategoryViewModel, collectionView: UICollectionView){
         self.viewModel = viewModel
         self.collectionView = collectionView
@@ -33,7 +40,7 @@ final class CategoryVC: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = Constants.Colors.white
         setupViews()
         makeConstraints()
         setupCollectionView()
@@ -41,7 +48,9 @@ final class CategoryVC: UIViewController {
     }
     private func setupViews(){
         view.addSubview(collectionView)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: CustomNavBarItem(image: UIImage(named: "t")!, frame: CGRect(x: 0, y: 0, width: CGFloat.rightNavButtonSize, height: CGFloat.rightNavButtonSize)))
+        view.addSubview(backButton)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: CustomNavBarItem(image: Constants.Images.user, frame: CGRect(x: 0, y: 0, width: CGFloat.rightNavButtonSize, height: CGFloat.rightNavButtonSize)))
         
     }
     private func setupCollectionView(){
@@ -60,11 +69,45 @@ final class CategoryVC: UIViewController {
     }
     private func bind(){
         viewModel.$food
-            .sink(receiveValue: {array in
+            .sink(receiveValue: { array in
                 self.array = array
-                self.collectionView.reloadData()
+                self.collectionView.reloadSections(IndexSet(integer: 1))
             })
             .store(in: &cancelable)
+    }
+    private func transformCell(_ cell: UICollectionViewCell) {
+        let cell = cell as? FoodOfCategory
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+            cell?.backgroundColor =  Constants.Colors.blue
+            cell?.setupTextColor(color: .white)
+        })
+        for otherCell in collectionView.visibleCells {
+            if otherCell != cell {
+                if otherCell.backgroundColor == Constants.Colors.blue {
+                    otherCell.backgroundColor = Constants.Colors.background_white
+                    let cell = otherCell as? FoodOfCategory
+                    cell?.setupTextColor(color: .black)
+                    
+                }
+            }
+        }
+    }
+    private func makeSort(array: [FoodModelCompl], teg: Tegs) -> [FoodModelCompl] {
+        switch teg {
+        case .all:
+            return array
+        case .rice:
+            return array.filter { $0.tegs.contains(.rice) }
+        case .salad:
+            return array.filter { $0.tegs.contains(.salad) }
+        case .fish:
+            return array.filter { $0.tegs.contains(.fish) }
+        case .none:
+            return array
+        }
+    }
+    @objc private func backPressed(){
+        navigationController?.popToRootViewController(animated: true)
     }
 }
 
@@ -87,7 +130,11 @@ extension CategoryVC: UICollectionViewDataSource {
         case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(FoodOfCategory.self)", for: indexPath) as? FoodOfCategory else { return UICollectionViewCell() }
              let item = viewModel.tags[indexPath.row]
-             cell.setupCell(name: item)
+             if item == Tegs.all && item != Tegs.fish {
+                 cell.backgroundColor = Constants.Colors.blue
+                 cell.setupTextColor(color: .white)
+             }
+             cell.setupCell(name: item.rawValue)
              return cell
         default:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(FoodCategorySingle.self)", for: indexPath) as? FoodCategorySingle else { return UICollectionViewCell() }
@@ -101,10 +148,13 @@ extension CategoryVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            collectionView.reloadData()
+            transformCell(collectionView.cellForItem(at: indexPath) ?? UICollectionViewCell())
+            let teg = viewModel.tags[indexPath.row]
+            self.array = makeSort(array: viewModel.food, teg: teg)
+            collectionView.reloadSections(IndexSet(integer: 1))
+            
         default:
             viewModel.openDetails(food: array[indexPath.row])
         }
-        
     }
 }
